@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Secure desktop password manager with AES-256-GCM encryption",
   "main": "dist/main/main.js",
-  "author": "flareeeeeeeeee",
+  "author": "flareeeeeeeeee <flare@users.noreply.github.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
