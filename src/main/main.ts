@@ -63,16 +63,13 @@ function toggleWindow(): void {
 }
 
 function createTray(): void {
-  const icon = nativeImage.createFromDataURL(
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA' +
-    'nklEQVQ4T2NkoBAwUqifgWoGMP7//38DEwMDwwEGBoZGBgYGfkIMYGFgYPjPwMCwn4GB4f' +
-    '///v0bGBkZC4gxgJmBgeE/IyPjfwYGhv8MDAwHiHEBCwMDwwFGRsb/DAwM+xkYGBqJcQEL' +
-    'AwPDAUZGxv+MjIz7GRgYGolxAQsDA8MBRkbG/4yMjPsZGBgaiQlkFgYGhgOMjIz/GRkZ9z' +
-    'MwMDQCAJfrMBGaISaTAAAAAElFTkSuQmCC'
-  );
+  const iconPath = process.platform === 'win32'
+    ? path.join(__dirname, '..', '..', 'build', 'icon.ico')
+    : path.join(__dirname, '..', '..', 'build', 'icon.png');
+  const icon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
 
   tray = new Tray(icon);
-  tray.setToolTip('Password Manager');
+  tray.setToolTip('Vault');
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show/Hide', click: toggleWindow },
@@ -87,8 +84,10 @@ function createTray(): void {
     },
   ]);
 
-  tray.setContextMenu(contextMenu);
-  tray.on('double-click', toggleWindow);
+  tray.on('click', toggleWindow);
+  tray.on('right-click', () => {
+    tray?.popUpContextMenu(contextMenu);
+  });
 }
 
 // Auto-lock management
